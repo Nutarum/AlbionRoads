@@ -16,9 +16,14 @@ export class AlbionMap extends React.Component {
          };
 
          //this.createNewNode(650,100,"Quiitun-Duosum",0);
-
+        this.import(); //si hya parametro en la url, importara el mapa         
+          
       }
 
+      replaceAll(string, search, replace) {
+        return string.split(search).join(replace);
+      }
+      
     NodeChangeHandler(nodeName,newX, newY) {
         const found = this.state.NodeList.find(e => e["Node"].props.name==nodeName);     
         found["posX"] = newX;
@@ -99,14 +104,36 @@ incrementToTime(increment){
   }  
 
   
-  export(){
-    document.getElementById('importTxt').value = JSON.stringify(this.state);
+  export(){ 
+
+    var firstparturl = window.location.href.split('&urlcode=')[0]; 
+
+    var url = firstparturl + "&urlcode=" + JSON.stringify(this.state);
+navigator.clipboard.writeText(url).then(function() { 
+  console.log("OK");
+}, function(err) {
+  console.error('Async: Could not copy text: ', err);
+});
+
+    //document.getElementById('importTxt').value = JSON.stringify(this.state);
   }
 
   import(){
    
-      var newState = JSON.parse(document.getElementById('importTxt').value);
+      //var newState = JSON.parse(document.getElementById('importTxt').value);
 
+      var urlparam = window.location.href.split('urlcode=')[1];
+          if(urlparam){
+            if(urlparam){
+              urlparam = this.replaceAll(urlparam,'%7B','{');
+              urlparam = this.replaceAll(urlparam,'%7D','}');
+              urlparam = this.replaceAll(urlparam,'%22','"');
+            }
+          }else{
+            return;
+          }
+          console.log(urlparam);
+          var newState = JSON.parse(urlparam);
       
       newState["NodeList"].forEach(e => {
         console.log()
@@ -127,7 +154,6 @@ incrementToTime(increment){
       } );
       
 
-      document.getElementById('btnImport').disabled = true;
 
       //this.state.RoadList = newState["RoadList"];
       //this.forceUpdate();
@@ -168,8 +194,7 @@ incrementToTime(increment){
 
               </p>
               <button onClick={()=>this.export()}>Export</button>
-                  <button id="btnImport" onClick={()=>this.import()}>Import</button>
-                  <input id="importTxt"></input>      
+               
 
                 {this.state.NodeList.map(node => node["Node"])}    
                 {this.state.RoadList.map(road => road["Road"])}

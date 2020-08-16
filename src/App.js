@@ -16,7 +16,4 @@ export default App;
 
 //TODO:
 
-//que no se puedan repetir nombres de zonas, ni caminos entre zonas (ojo porque no las estamos borrando, solo dejanto temps)
-
-//importar y exportar
-
+//colores en las lineas segun el tiempo restante
