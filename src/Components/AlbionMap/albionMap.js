@@ -86,11 +86,21 @@ export class AlbionMap extends React.Component {
 
       
       newState["NodeList"].forEach(e => {
-        this.createNewNode(e["posX"],e["posY"],e["Node"]["props"]["name"],e["Node"]["props"]["type"]);
+
+        if(e["posX"]>-999){
+          this.createNewNode(e["posX"],e["posY"],e["Node"]["props"]["name"],e["Node"]["props"]["type"]);
+        }
+        
       } );
 
+      
       newState["RoadList"].forEach(e => {
-        this.createNewRoad(e["posX"],e["posY"],e["time"],e["Road"]["props"]["from"],e["Road"]["props"]["to"],e["size"]);
+
+        if(e["size"]>0){
+          this.createNewRoad(e["posX"],e["posY"],e["time"],e["Road"]["props"]["from"],e["Road"]["props"]["to"],e["size"]);
+        }
+        
+     
       } );
       
 

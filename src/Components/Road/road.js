@@ -64,7 +64,7 @@ export class Road extends React.Component {
 
      
             this.state.size=-1;
-      
+            this.props.handleParentChange(this.props.from, this.props.to,this.state.time, this.state.size,this.state.posX,this.state.posY);
         
         this.forceUpdate();
       }

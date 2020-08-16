@@ -75,16 +75,15 @@ export class Node extends React.Component {
 
       delete(){
 
-        if(this.props.type>0){
-            this.props.type=-1;
-        }
-        
+            this.state.posX=-1000;
+            this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY);
+
         this.forceUpdate();
       }
 
     render() {        
 
-        if(this.props.type<0){
+        if(this.state.posX<-999){
 return <span></span>;
         }else{
             return (
