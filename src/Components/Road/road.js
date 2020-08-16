@@ -11,7 +11,7 @@ export class Road extends React.Component {
         this.state = {
             posX: 0,
             posY: 0,
-            time: new Date(),
+            time: new Date().getSeconds(),
             size:7
          };       
          this.state.size = this.props.size;        
@@ -41,11 +41,11 @@ export class Road extends React.Component {
     }
 
       showTime() { 
-        return this.state.time.toLocaleString();
+        return new Date(this.state.time).toLocaleString();
     } 
 
     showRemaining(){
-        return this.dateDiffToString(this.state.time, new Date());
+        return this.dateDiffToString(new Date(this.state.time), new Date());
     }
 
       componentDidMount() {

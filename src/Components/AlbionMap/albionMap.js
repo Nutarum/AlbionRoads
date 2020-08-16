@@ -49,23 +49,27 @@ export class AlbionMap extends React.Component {
     this.forceUpdate();
   }
 
+
   clickNewRoad(){
-    this.createNewRoad(0,0,document.getElementById('timeInput').value,document.getElementById('fromInput').value,document.getElementById('toInput').value,document.getElementById('sizeSelect').value);
+    this.createNewRoad(0,0,this.incrementToTime(document.getElementById('timeInput').value),document.getElementById('fromInput').value,document.getElementById('toInput').value,document.getElementById('sizeSelect').value);
 }
 
-  createNewRoad(posX, posY, increment, from,to, size){
-      var newRoad = {};
-      newRoad["posX"] = posX;
-      newRoad["posY"] = posY;     
-      newRoad["size"] = posY;
-
+incrementToTime(increment){
     var time = new Date();
     increment = this.timeToDecimal(increment); 
     time.setSeconds(time.getSeconds() + increment);
+    return time;
+}
 
-    newRoad["time"] = time;
-    newRoad["Road"] = <Road size={size} from={from} to={to} time={time} posX={posX} posY={posY} handleParentChange={this.RoadChangeHandler.bind(this)} ></Road>
+  createNewRoad(posX, posY, time, from,to, size){
 
+      var newRoad = {};
+      newRoad["posX"] = posX;
+      newRoad["posY"] = posY;     
+      newRoad["size"] = posY; 
+
+    newRoad["time"] = time.getTime();
+    newRoad["Road"] = <Road size={size} from={from} to={to} time={time.getTime()} posX={posX} posY={posY} handleParentChange={this.RoadChangeHandler.bind(this)} ></Road>
     this.state.RoadList.push(newRoad);
     this.forceUpdate();
   }
@@ -97,7 +101,7 @@ export class AlbionMap extends React.Component {
       newState["RoadList"].forEach(e => {
 
         if(e["size"]>0){
-          this.createNewRoad(e["posX"],e["posY"],e["time"],e["Road"]["props"]["from"],e["Road"]["props"]["to"],e["size"]);
+          this.createNewRoad(e["posX"],e["posY"],new Date(e["time"]),e["Road"]["props"]["from"],e["Road"]["props"]["to"],e["size"]);
         }
         
      
