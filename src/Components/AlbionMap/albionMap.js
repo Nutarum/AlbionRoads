@@ -24,10 +24,13 @@ export class AlbionMap extends React.Component {
         return string.split(search).join(replace);
       }
       
-    NodeChangeHandler(nodeName,newX, newY) {
+    NodeChangeHandler(nodeName,newX, newY,newmaptype) {
         const found = this.state.NodeList.find(e => e["Node"].props.name==nodeName);     
         found["posX"] = newX;
         found["posY"] = newY;
+        found["maptype"] = newmaptype;
+
+
     }
 
     RoadChangeHandler(fromName,toName,time,size,newX, newY) {
@@ -36,17 +39,15 @@ export class AlbionMap extends React.Component {
         found["posY"] = newY;
         found["time"] = time;
         found["size"] = size;
-
-        console.log(found);
     }
 
   
 
     clickNewNode(){
-        this.createNewNode(0,0,document.getElementById('nameInput').value,document.getElementById('typeSelect').value);
+        this.createNewNode(0,0,document.getElementById('nameInput').value,document.getElementById('maptypeSelect').value);
     }
 
-  createNewNode(posX, posY , name, type){      
+  createNewNode(posX, posY , name, maptype){      
 
     const found = this.state.NodeList.find(e => e["Node"].props.name==name);    
     if(found){
@@ -57,7 +58,8 @@ export class AlbionMap extends React.Component {
     var newNode = {};
     newNode["posX"] = posX;
     newNode["posY"] = posY;
-    newNode["Node"] = <Node posX={posX} posY={posY} name={name} type={type} handleParentChange={this.NodeChangeHandler.bind(this)}></Node>;
+    newNode["maptype"] = maptype;
+    newNode["Node"] = <Node posX={posX} posY={posY} name={name} maptype={maptype} handleParentChange={this.NodeChangeHandler.bind(this)}></Node>;
     this.state.NodeList.push(newNode);
     this.forceUpdate();
   }
@@ -105,12 +107,14 @@ incrementToTime(increment){
 
   
   export(){ 
+console.log(this.state);
+     
 
     var firstparturl = window.location.href.split('&urlcode=')[0]; 
 
     var url = firstparturl + "&urlcode=" + JSON.stringify(this.state);
 navigator.clipboard.writeText(url).then(function() { 
-  console.log("OK");
+  alert("URL copiada al portapapeles (pasala por tinyurl para no spamear al pasarla...)")
 }, function(err) {
   console.error('Async: Could not copy text: ', err);
 });
@@ -128,6 +132,7 @@ navigator.clipboard.writeText(url).then(function() {
               urlparam = this.replaceAll(urlparam,'%7B','{');
               urlparam = this.replaceAll(urlparam,'%7D','}');
               urlparam = this.replaceAll(urlparam,'%22','"');
+              urlparam = this.replaceAll(urlparam,'%20',' ');
             }
           }else{
             return;
@@ -136,9 +141,8 @@ navigator.clipboard.writeText(url).then(function() {
           var newState = JSON.parse(urlparam);
       
       newState["NodeList"].forEach(e => {
-        console.log()
-        if(e["posX"]>-999){
-          this.createNewNode(e["posX"],e["posY"],e["Node"]["props"]["name"],e["Node"]["props"]["type"]);
+               if(e["posX"]>-999){
+          this.createNewNode(e["posX"],e["posY"],e["Node"]["props"]["name"],e["maptype"]);
         }
         
       } );
@@ -169,7 +173,7 @@ navigator.clipboard.writeText(url).then(function() {
                 <button onClick={()=>this.clickNewNode()}>CreateNode</button>
                 name:<input id="nameInput"></input>      
 
-                <select id="typeSelect" name="select">
+                <select id="maptypeSelect" name="select">
                 <option value="0" >Home</option> 
                 <option value="1" selected>Road</option> 
                 <option value="2">Road (with hideouts)</option>
@@ -188,7 +192,7 @@ navigator.clipboard.writeText(url).then(function() {
                 </select>
                 from:<input id="fromInput"></input>      
                 to:<input id="toInput"></input>   
-                time:<input id="timeInput"></input>  
+                time(hh:mm):<input id="timeInput"></input>  
                 
               <p>
 

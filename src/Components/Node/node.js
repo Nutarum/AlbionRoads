@@ -8,46 +8,31 @@ export class Node extends React.Component {
         // Don't call this.setState() here!
         this.state = {
             posX:0,
-            posY:0
-         };                 
+            posY:0,
+            maptype:0
+         };   
+
+         this.state.maptype = this.props.maptype;
+                 
       }
       
       getRoadTypeAsColor(){
-            if(this.props.type==0){ 
+            if(this.state.maptype==0){ 
                 return 'teal';//home
-            }else if(this.props.type==1){
+            }else if(this.state.maptype==1){
                 return 'pink';//road
-            }else if(this.props.type==2){
+            }else if(this.state.maptype==2){
                 return 'purple';//road with hideouts
-            }else if(this.props.type==3){
+            }else if(this.state.maptype==3){
                 return 'blue';//blue
-            }else if(this.props.type==4){
+            }else if(this.state.maptype==4){
                 return 'Yellow';//yelow
-            }else if(this.props.type==5){
+            }else if(this.state.maptype==5){
                 return 'red';//red
-            }else if(this.props.type==6){
+            }else if(this.state.maptype==6){
                 return 'grey';//black
             }else {
-                return 'Undefined';
-            }
-      }
-      getRoadTypeAsText(){
-            if(this.props.type==0){
-                return 'HOME';
-            }else if(this.props.type==1){
-                return 'Road';
-            }else if(this.props.type==2){
-                return 'Road (hideouts)';
-            }else if(this.props.type==3){
-                return 'Blue';
-            }else if(this.props.type==4){
-                return 'Yellow';
-            }else if(this.props.type==5){
-                return 'Red';
-            }else if(this.props.type==6){
-                return 'Black';
-            }else {
-                return 'Undefined';
+                return 'white';
             }
       }
 
@@ -66,17 +51,24 @@ export class Node extends React.Component {
 
       }
 
+
+      onChange(e){
+        this.state.maptype= e.target.value;
+        this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY,this.state.maptype);
+        this.forceUpdate();
+      }
+
       handleStop(e,data){        
           this.state.posX=data.x;
           this.state.posY=data.y;
 
-          this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY);
+          this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY,this.state.maptype);
     }
 
       delete(){
 
             this.state.posX=-1000;
-            this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY);
+            this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY,this.state.maptype);
 
         this.forceUpdate();
       }
@@ -86,6 +78,11 @@ export class Node extends React.Component {
         if(this.state.posX<-999){
 return <span></span>;
         }else{
+
+            var styleSelectmaptypeNode = {
+                backgroundColor: this.getRoadTypeAsColor()
+              };
+
             return (
 
 
@@ -105,7 +102,24 @@ return <span></span>;
                 <div className={"box no-cursor node posAbsolute " + this.props.name} style={{
                                       backgroundColor: this.getRoadTypeAsColor()                               
                                   }}>           
-                      <strong className="cursor"><div>{this.getRoadTypeAsText()}</div>
+                      <strong className="cursor">
+                          
+                          <div>
+
+                        <select defaultValue={this.state.maptype} style = {styleSelectmaptypeNode} onChange = {this.onChange.bind(this)} name="select">
+                        <option value="0" >Home</option> 
+                        <option value="1" >Road</option> 
+                        <option value="2" >Road (HOs)</option>
+                        <option value="3" >Blue</option>
+                        <option value="4">Yellow</option>
+                        <option value="5">Red</option>
+                        <option value="6" >Black</option>
+                        <option value="7" >Undefined</option>                
+                        </select>
+                              
+                              </div>
+
+
                       <div >{this.props.name}</div>             </strong> 
                       <button class="smallBtn" onClick={()=>this.delete()}> del </button>
               </div>
