@@ -85,7 +85,7 @@ incrementToTime(increment){
       var newRoad = {};
       newRoad["posX"] = posX;
       newRoad["posY"] = posY;     
-      newRoad["size"] = posY; 
+      newRoad["size"] = size; 
 
     newRoad["time"] = time.getTime();
     newRoad["Road"] = <Road size={size} from={from} to={to} time={time.getTime()} posX={posX} posY={posY} handleParentChange={this.RoadChangeHandler.bind(this)} ></Road>
@@ -127,6 +127,8 @@ incrementToTime(increment){
       } );
       
 
+      document.getElementById('btnImport').disabled = true;
+
       //this.state.RoadList = newState["RoadList"];
       //this.forceUpdate();
   }
@@ -136,7 +138,7 @@ incrementToTime(increment){
 
         return (            
             <div>
-              <span className="left">1</span>
+              <span className="left">3</span>
                 
                 <button onClick={()=>this.clickNewNode()}>CreateNode</button>
                 name:<input id="nameInput"></input>      
@@ -166,7 +168,7 @@ incrementToTime(increment){
 
               </p>
               <button onClick={()=>this.export()}>Export</button>
-                  <button onClick={()=>this.import()}>Import</button>
+                  <button id="btnImport" onClick={()=>this.import()}>Import</button>
                   <input id="importTxt"></input>      
 
                 {this.state.NodeList.map(node => node["Node"])}    
