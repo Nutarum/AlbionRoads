@@ -1,6 +1,7 @@
 import React from 'react';
 import { Node } from "../Node/node.js"
 import { Road } from "../Road/road.js"
+import './albionMap.css'
 
 export class AlbionMap extends React.Component {
     constructor(props) {
@@ -41,6 +42,13 @@ export class AlbionMap extends React.Component {
     }
 
   createNewNode(posX, posY , name, type){      
+
+    const found = this.state.NodeList.find(e => e["Node"].props.name==name);    
+    if(found){
+      alert("NODE NAME ALREADY EXISTS");
+      return;
+    }
+
     var newNode = {};
     newNode["posX"] = posX;
     newNode["posY"] = posY;
@@ -62,6 +70,17 @@ incrementToTime(increment){
 }
 
   createNewRoad(posX, posY, time, from,to, size){
+
+    var found = this.state.RoadList.find(e => (e["Road"].props.from==from && e["Road"].props.to==to));    
+    if(found){
+      alert("ROAD ALREADY EXISTS");
+      return;
+    }
+    found = this.state.RoadList.find(e => (e["Road"].props.from==to && e["Road"].props.to==from));    
+    if(found){
+      alert("ROAD ALREADY EXISTS");
+      return;
+    }
 
       var newRoad = {};
       newRoad["posX"] = posX;
@@ -90,7 +109,7 @@ incrementToTime(increment){
 
       
       newState["NodeList"].forEach(e => {
-
+        console.log()
         if(e["posX"]>-999){
           this.createNewNode(e["posX"],e["posY"],e["Node"]["props"]["name"],e["Node"]["props"]["type"]);
         }
@@ -113,10 +132,11 @@ incrementToTime(increment){
   }
 
 
-    render() {    
+    render() {     
 
         return (            
             <div>
+              <span className="left">1</span>
                 
                 <button onClick={()=>this.clickNewNode()}>CreateNode</button>
                 name:<input id="nameInput"></input>      
