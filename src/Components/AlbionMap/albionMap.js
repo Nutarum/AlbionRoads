@@ -118,6 +118,7 @@ export class AlbionMap extends React.Component {
                 name:<input id="nameInput"></input>      
 
                 <select id="typeSelect" name="select">
+                <option value="0" >Home</option> 
                 <option value="1" selected>Road</option> 
                 <option value="2">Road (with hideouts)</option>
                 <option value="3">Blue</option>
