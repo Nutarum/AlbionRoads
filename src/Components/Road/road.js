@@ -52,6 +52,13 @@ export class Road extends React.Component {
     
         this.interval = setInterval(() => {
 
+          if(this.state.size>-1){ //si aun no lo hemos "borrado"
+          //miramos a ver si ya se ha cerrado
+              if(this.state.time<new Date()){
+                this.delete();
+            }
+          }
+          
             this.forceUpdate();
         
         }, 1000);
