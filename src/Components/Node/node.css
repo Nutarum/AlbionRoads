@@ -1,0 +1,15 @@
+.node {
+    width: 100px;
+    border-style: solid;
+    font-size:11px;
+}
+
+.posAbsolute{
+    position: absolute
+}
+
+.smallBtn {
+    height: 18px;
+    font-size:10px;
+    float: right;
+}
