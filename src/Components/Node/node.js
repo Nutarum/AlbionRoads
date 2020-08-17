@@ -20,21 +20,21 @@ export class Node extends React.Component {
       
       getRoadTypeAsColor(){
             if(this.props.maptype==0){ 
-                return 'teal';//home
+                return 'rgb(178, 102, 255)';//home
             }else if(this.props.maptype==1){
-                return 'pink';//road
+                return 'rgb(61, 255, 200)';//road
             }else if(this.props.maptype==2){
-                return 'purple';//road with hideouts
+                return 'rgb(32, 161, 131)';//road with hideouts               
             }else if(this.props.maptype==3){
-                return 'blue';//blue
+                return 'rgb(100, 175, 255)';//blue
             }else if(this.props.maptype==4){
-                return 'Yellow';//yelow
+                return 'rgb(255, 255, 100)';//yelow
             }else if(this.props.maptype==5){
-                return 'red';//red
+                return 'rgb(255, 90, 90)';//red
             }else if(this.props.maptype==6){
-                return 'grey';//black
+                return 'rgb(125, 125, 125)';//black
             }else {
-                return 'white';
+                return 'rgb(254, 102, 255)';//undefined
             }
       }
 

@@ -56,6 +56,7 @@ export class AlbionMap extends React.Component {
 
     clickNewNode(){
         this.createNewNode(0,0,document.getElementById('nameInput').value,document.getElementById('maptypeSelect').value);
+        document.getElementById('nameInput').value = "";
     }
 
   createNewNode(posX, posY , name, maptype){ 
