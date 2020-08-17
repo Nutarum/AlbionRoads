@@ -65,13 +65,25 @@ export class Node extends React.Component {
             var styleSelectmaptypeNode = {
                 backgroundColor: this.getRoadTypeAsColor()
               };
+              
+
+              var styleColors = {
+                backgroundColor: this.getRoadTypeAsColor(),
+                borderColor: "black"
+              };
+              if(this.props.name==this.props.selectedNode){
+                styleColors = {
+                    backgroundColor: this.getRoadTypeAsColor(),
+                    borderColor: "red"
+                  };
+              }
 
             return (
 
 
                 <span   onClick={()=>this.onClick()}>
     <Draggable
-              
+             
     
               //axis="y" (si no ponemos esto, el movimiento es libre)
               handle="div"
@@ -82,9 +94,7 @@ export class Node extends React.Component {
               onStart={this.handleStart}
               onDrag={this.handleDrag}
               onStop={this.handleStop.bind(this)}>
-                <div className={"box no-cursor node posAbsolute " + this.props.name} style={{
-                                      backgroundColor: this.getRoadTypeAsColor()                               
-                                  }}>           
+                <div   className={"box no-cursor node posAbsolute " + this.props.name} style={styleColors}>           
                       <strong className="cursor">
                           
                           <div>

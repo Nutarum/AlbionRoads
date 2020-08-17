@@ -112,7 +112,7 @@ incrementToTime(increment){
       return;
     }
 
-    var found = this.state.RoadList.find(e => (e["from"]==from && e["to"].to==to));    
+    var found = this.state.RoadList.find(e => (e["from"]==from && e["to"]==to));    
     if(found){
       alert("Error: This road already exists.");
       return;
@@ -122,7 +122,6 @@ incrementToTime(increment){
       alert("Error: This road already exists.");
       return;
     }
-
     if(!this.state.NodeList.find(e => e["name"]==from) || !this.state.NodeList.find(e => e["name"]==to)){
       alert("Error: One of the connection ('from' or 'to') doesnt exists.");
       return;
@@ -225,7 +224,7 @@ incrementToTime(increment){
               <button onClick={()=>this.export()}>Export</button>
                
 
-                {this.state.NodeList.map((node,i) => <Node key={i} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node> )}    
+                {this.state.NodeList.map((node,i) => <Node key={i} selectedNode={this.state.newRoad} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node> )}    
                 {this.state.RoadList.map((road,i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
              
 
