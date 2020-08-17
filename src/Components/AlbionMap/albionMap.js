@@ -48,10 +48,8 @@ export class AlbionMap extends React.Component {
       this.forceUpdate();
     }
 
-    RoadChangeHandler(fromName,toName,time,size,newX, newY) {
-        var found = this.state.RoadList.find(e => (e["from"]==fromName) && (e["to"]==toName) );        
-        found["posX"] = newX;
-        found["posY"] = newY;
+    RoadChangeHandler(fromName,toName,time, size) {
+        var found = this.state.RoadList.find(e => (e["from"]==fromName) && (e["to"]==toName) );      
         found["time"] = time;
         found["size"] = size;
 
@@ -84,7 +82,7 @@ export class AlbionMap extends React.Component {
   }
 
   clickNewRoad(){
-    this.createNewRoad(0,0,this.incrementToTime(document.getElementById('timeInput').value),document.getElementById('fromInput').value,document.getElementById('toInput').value,document.getElementById('sizeSelect').value);
+    this.createNewRoad(this.incrementToTime(document.getElementById('timeInput').value),document.getElementById('fromInput').value,document.getElementById('toInput').value,document.getElementById('sizeSelect').value);
 }
 
 incrementToTime(increment){
@@ -94,7 +92,7 @@ incrementToTime(increment){
     return time;
 }
 
-  createNewRoad(posX, posY, time, from,to, size){
+  createNewRoad(time, from,to, size){
 
     if(from=="" || to==""){
       return;
@@ -116,9 +114,7 @@ incrementToTime(increment){
       return;
     }
 
-      var newRoad = {};
-      newRoad["posX"] = posX;
-      newRoad["posY"] = posY;     
+      var newRoad = {};    
       newRoad["size"] = size; 
       if(time.getTime()!=0){ //si la fecha no es nula (fecha 0)
         newRoad["time"] = time.getTime();
@@ -178,7 +174,7 @@ navigator.clipboard.writeText(url).then(function() {
       
       newState["RoadList"].forEach(e => {
         if(e["from"]!=""){
-          this.createNewRoad(e["posX"],e["posY"],new Date(e["time"]),e["from"],e["to"],e["size"]);
+          this.createNewRoad(new Date(e["time"]),e["from"],e["to"],e["size"]);
         }             
       } );    
   }
@@ -221,7 +217,7 @@ navigator.clipboard.writeText(url).then(function() {
                
 
                 {this.state.NodeList.map((node,i) => <Node key={i} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)}></Node> )}    
-                {this.state.RoadList.map((road,i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} posX={road["posX"]} posY={road["posY"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
+                {this.state.RoadList.map((road,i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
              
 
             </div>          

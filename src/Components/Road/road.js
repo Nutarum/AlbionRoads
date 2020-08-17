@@ -9,7 +9,8 @@ export class Road extends React.Component {
         super(props);   
         // Don't call this.setState() here!
         this.state = {
-            
+            posX: 0,
+            posY: 0
          };             
       }      
 
@@ -51,8 +52,47 @@ export class Road extends React.Component {
                 this.delete(false);
             }
           }
+
+
+          //recolocamos automaticamente el camino
+          var rect1 = (document.getElementsByClassName(this.props.from));
+          var rect2 = (document.getElementsByClassName(this.props.to));
           
-            this.forceUpdate();
+          if(rect1.length>0 && rect2.length>0){
+              rect1 = rect1[0].getBoundingClientRect();
+
+              var x1 = rect1['x']+(rect1['width']/2);
+              var y1 = rect1['y']-(rect1['height']*1.5);
+    
+              rect2 = rect2[0].getBoundingClientRect();
+              var x2 = rect2['x']+(rect2['width']/2);
+              var y2 = rect2['y']-(rect2['height']*1.5);
+    
+              if(x1>x2){
+                var tmp = x1;
+                x1=x2;
+                x2=tmp;
+              }
+              if(y1>y2){
+                var tmp = y1;
+                y1=y2;
+                y2=tmp;
+              }
+              this.state.posX = (x1 + ((x2-x1) / 2))-50;
+              this.state.posY = (y1 + ((y2-y1) / 2))-30;
+            
+              this.forceUpdate();
+          }
+         
+
+
+
+
+          //var rect = element;
+          //console.log(rect.top, rect.right, rect.bottom, rect.left);
+
+          
+          this.forceUpdate();
         
         }, 1000);
       }
@@ -61,7 +101,7 @@ export class Road extends React.Component {
       }
 
       onChange(e){
-        this.props.handleParentChange(this.props.from, this.props.to,this.props.time, e.target.value,this.props.posX,this.props.posY);
+        this.props.handleParentChange(this.props.from, this.props.to,this.props.time, e.target.value);
         this.forceUpdate();
       }
 
@@ -102,8 +142,21 @@ export class Road extends React.Component {
         this.forceUpdate();
   }
 
-      
+     
     render() {     
+
+      var tRestante = (this.props.time - new Date().getTime())/1000;      
+      var lineColor = "green";
+      if(tRestante<3600){
+        lineColor="red";
+      }else if(tRestante<10800){
+        lineColor="orange";
+      }
+
+      var lineStyle="solid";
+      if(tRestante<1800){
+        lineStyle="dashed";
+      }
         
        
         if(this.props.from==""){
@@ -111,12 +164,16 @@ export class Road extends React.Component {
                     }else{
             return (
                 <div>
-                    <LineTo from={this.props.from} to={this.props.to}></LineTo>
-                    <Draggable
-                        //axis="y" (si no ponemos esto, el movimiento es libre)
-                        handle="div"
-                        defaultPosition={{x: this.props.posX, y: this.props.posY}}
-                        position={null}
+                    <LineTo from={this.props.from} to={this.props.to} borderColor={lineColor} borderStyle={lineStyle}></LineTo>
+                    <Draggable                        
+                        //handle="div"
+
+                        // vamos a hacer una tonteria, lo dejo como dragable pero le quito la opcion de desplazarse
+                        //asi mantiene todas las cosas de position absolute que tenga y tal (ya lo quitare mas adelante si eso....)
+                        handle="none" 
+
+                        defaultPosition={{x: this.state.posX, y: this.state.posY}}
+                        position={{x: this.state.posX, y: this.state.posY}}
                         grid={[1, 1]}
                         scale={1}
                         onStart={this.handleStart}

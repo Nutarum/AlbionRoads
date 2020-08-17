@@ -2,6 +2,7 @@
     width: 100px;
     border-style: solid;
     font-size:11px;
+    z-index: 100;
 }
 
 .posAbsolute{
