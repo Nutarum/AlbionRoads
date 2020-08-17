@@ -69,8 +69,8 @@ export class Road extends React.Component {
               }
               //OJO CON ESAS 2 CONSTANTES, CUANDO SE CAMBIAN LOS INPUTS DE LA PARTE DE ARRIBA
               //LOS CAMINOS SE DESCOLOCAN PORQUE LA PANTALLA TOMA UNA REFERENCIA DEL 0 DISTINTA
-              this.state.posX = (x1 + ((x2-x1) / 2))-50;
-              this.state.posY = (y1 + ((y2-y1) / 2))+20;            
+              this.state.posX = (x1 + ((x2-x1) / 2))-50 + window.scrollX;
+              this.state.posY = (y1 + ((y2-y1) / 2))+20 + window.scrollY;            
               this.forceUpdate();
           }
     }
