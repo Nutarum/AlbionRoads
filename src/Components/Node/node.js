@@ -57,12 +57,15 @@ export class Node extends React.Component {
     }
 
       delete(){
+
+        if (!window.confirm("Confirm delete")) {
+            return;
+          }
+          
             this.props.handleDeleteNode(this.props.name);
       }
 
     render() {        
-
-        console.log(this.props.posX);
 
         if(this.props.name==""){
             return <span></span>;
@@ -110,7 +113,7 @@ export class Node extends React.Component {
 
 
                       <div >{this.props.name}</div>             </strong> 
-                      <button class="smallBtn" onClick={()=>this.delete()}> del </button>
+                      <button className="smallBtn" onClick={()=>this.delete()}> del </button>
               </div>
             </Draggable>
                 </span>

@@ -15,8 +15,12 @@ export class AlbionMap extends React.Component {
             ]
          };
 
-        this.import(); //si hya parametro en la url, importara el mapa         
+      
           
+      }
+
+      componentDidMount() {
+        this.import(); //si hya parametro en la url, importara el mapa         
       }
 
       replaceAll(string, search, replace) {
@@ -50,6 +54,8 @@ export class AlbionMap extends React.Component {
         found["posY"] = newY;
         found["time"] = time;
         found["size"] = size;
+
+        this.forceUpdate();
     }
 
     clickNewNode(){
@@ -94,14 +100,19 @@ incrementToTime(increment){
       return;
     }
 
-    var found = this.state.RoadList.find(e => (e["Road"].props.from==from && e["Road"].props.to==to));    
+    var found = this.state.RoadList.find(e => (e["from"]==from && e["to"].to==to));    
     if(found){
-      alert("ROAD ALREADY EXISTS");
+      alert("Error: This road already exists.");
       return;
     }
-    found = this.state.RoadList.find(e => (e["Road"].props.from==to && e["Road"].props.to==from));    
+    found = this.state.RoadList.find(e => (e["from"]==to && e["to"]==from));    
     if(found){
-      alert("ROAD ALREADY EXISTS");
+      alert("Error: This road already exists.");
+      return;
+    }
+
+    if(!this.state.NodeList.find(e => e["name"]==from) || !this.state.NodeList.find(e => e["name"]==to)){
+      alert("Error: One of the connection ('from' or 'to') doesnt exists.");
       return;
     }
 
@@ -109,7 +120,11 @@ incrementToTime(increment){
       newRoad["posX"] = posX;
       newRoad["posY"] = posY;     
       newRoad["size"] = size; 
-      newRoad["time"] = time.getTime();
+      if(time.getTime()!=0){ //si la fecha no es nula (fecha 0)
+        newRoad["time"] = time.getTime();
+      }else{
+        newRoad["time"] = "a"; //para que salga NAN
+      }        
 
       newRoad["from"] = from; 
       newRoad["to"] = to; 
@@ -125,7 +140,6 @@ incrementToTime(increment){
 
   
   export(){ 
-console.log(this.state);
      
 
     var firstparturl = window.location.href.split('&urlcode=')[0]; 
@@ -164,7 +178,7 @@ navigator.clipboard.writeText(url).then(function() {
       
       newState["RoadList"].forEach(e => {
         if(e["from"]!=""){
-          this.createNewRoad(e["posX"],e["posY"],new Date(e["time"]),e["from"],e["to"]);
+          this.createNewRoad(e["posX"],e["posY"],new Date(e["time"]),e["from"],e["to"],e["size"]);
         }             
       } );    
   }
@@ -174,14 +188,14 @@ navigator.clipboard.writeText(url).then(function() {
 
         return (            
             <div>
-              <span className="left">3</span>
+              <span className="left">4</span>
                 
-                <button onClick={()=>this.clickNewNode()}>CreateNode</button>
+                <button onClick={()=>this.clickNewNode()}>Add map</button>
                 name:<input id="nameInput"></input>      
 
-                <select id="maptypeSelect" name="select">
+                type:<select id="maptypeSelect" name="select" defaultValue={1}>
                 <option value="0" >Home</option> 
-                <option value="1" selected>Road</option> 
+                <option value="1" >Road</option> 
                 <option value="2">Road (with hideouts)</option>
                 <option value="3">Blue</option>
                 <option value="4">Yellow</option>
@@ -190,10 +204,10 @@ navigator.clipboard.writeText(url).then(function() {
                 <option value="7">Undefined</option>                
                 </select>
                 <p></p>
-                <button onClick={()=>this.clickNewRoad()}>CreateRoad</button>
-                <select id="sizeSelect" name="select">
+                <button onClick={()=>this.clickNewRoad()}>Add road</button>
+                <select id="sizeSelect" name="select" defaultValue={7}>
                 <option value="2">2</option> 
-                <option value="7" selected>7</option>
+                <option value="7" >7</option>
                 <option value="20">20</option>          
                 </select>
                 from:<input id="fromInput"></input>      
@@ -206,8 +220,8 @@ navigator.clipboard.writeText(url).then(function() {
               <button onClick={()=>this.export()}>Export</button>
                
 
-                {this.state.NodeList.map(node => <Node posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)}></Node> )}    
-                {this.state.RoadList.map(road => <Road size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} posX={road["posX"]} posY={road["posY"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
+                {this.state.NodeList.map((node,i) => <Node key={i} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)}></Node> )}    
+                {this.state.RoadList.map((road,i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} posX={road["posX"]} posY={road["posY"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
              
 
             </div>          

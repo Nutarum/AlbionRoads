@@ -48,7 +48,7 @@ export class Road extends React.Component {
           if(this.props.size>-1){ //si aun no lo hemos "borrado"
           //miramos a ver si ya se ha cerrado
               if(this.props.time<new Date()){
-                this.delete();
+                this.delete(false);
             }
           }
           
@@ -60,16 +60,46 @@ export class Road extends React.Component {
         clearInterval(this.interval);
       }
 
-      delete(){
-        
-            this.props.handleParentDelete(this.props.from, this.props.to);
-        
+      onChange(e){
+        this.props.handleParentChange(this.props.from, this.props.to,this.props.time, e.target.value,this.props.posX,this.props.posY);
         this.forceUpdate();
       }
+
+      delete(withConfirm){        
+
+        if(withConfirm){
+          if (!window.confirm("Confirm delete")) {
+            return;
+          }
+        }
+        
+
+            this.props.handleDeleteRoad(this.props.from, this.props.to);        
+      }
+
+      recalc(){
+
+        var t = prompt("Remaining time (hh:mm):", "");
+        if(!t){
+          return;
+        }
+      
+        t = t.split(':');    
+        var increment =  parseInt(t[0], 10)*3600 + parseInt(t[1], 10)*60;
+
+        var newTime = new Date();
+      
+        newTime.setSeconds(newTime.getSeconds() + increment);
+
+        this.props.handleParentChange(this.props.from, this.props.to,newTime, this.props.size,this.props.posX,this.props.posY);
+        this.forceUpdate();
+      }
+
 
       handleStop(e,data){      
      
         this.props.handleParentChange(this.props.from, this.props.to,this.props.time, this.props.size,data.x,data.y);
+        this.forceUpdate();
   }
 
       
@@ -93,7 +123,18 @@ export class Road extends React.Component {
                         onDrag={this.handleDrag}
                         onStop={this.handleStop.bind(this)}>
                         <div className={"box no-cursor posAbsolute"}>           
-                               <div className="cursor"> <strong> {this.props.size}</strong>  <br/>  <span class="dateTime" >{this.showTime()} </span><br/> {this.showRemaining()  }</div>      <button class="smallBtn2" onClick={()=>this.delete()}> del </button>
+                               <div className="cursor">                                  
+                               <select defaultValue={this.props.size} onChange = {this.onChange.bind(this)} name="select">
+                              <option value="2" >2</option> 
+                              <option value="7" >7</option> 
+                              <option value="20" >20</option>           
+                              </select>                                 
+                              <br/>  <span className="dateTime" >{this.showTime()} </span>
+                              
+                              <br/> {this.showRemaining()  } 
+                              <button className="smallBtn2" onClick={()=>this.recalc()}> recalc </button>
+                              </div>  
+                                  <button className="smallBtn2" onClick={()=>this.delete(true)}> del </button>
                         </div>
                     </Draggable>
                 </div>
