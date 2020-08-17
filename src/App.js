@@ -16,4 +16,4 @@ export default App;
 
 //TODO:
 
-//colores en las lineas segun el tiempo restante
+//creación de caminos interactiva (o al menos algo mas intuitivo)

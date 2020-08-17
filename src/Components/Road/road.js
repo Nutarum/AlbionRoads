@@ -158,6 +158,11 @@ export class Road extends React.Component {
         lineStyle="dashed";
       }
         
+
+      var typeUnselect={       
+        userSelect:'none',
+        zIndex: 99
+      }
        
         if(this.props.from==""){
             return <span></span>;
@@ -165,7 +170,7 @@ export class Road extends React.Component {
             return (
                 <div>
                     <LineTo from={this.props.from} to={this.props.to} borderColor={lineColor} borderStyle={lineStyle}></LineTo>
-                    <Draggable                        
+                    <Draggable                  
                         //handle="div"
 
                         // vamos a hacer una tonteria, lo dejo como dragable pero le quito la opcion de desplazarse
@@ -179,7 +184,7 @@ export class Road extends React.Component {
                         onStart={this.handleStart}
                         onDrag={this.handleDrag}
                         onStop={this.handleStop.bind(this)}>
-                        <div className={"box no-cursor posAbsolute"}>           
+                        <div style={typeUnselect}  className={"box no-cursor posAbsolute"}>           
                                <div className="cursor">                                  
                                <select defaultValue={this.props.size} onChange = {this.onChange.bind(this)} name="select">
                               <option value="2" >2</option> 

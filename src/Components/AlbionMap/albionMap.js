@@ -98,6 +98,11 @@ incrementToTime(increment){
       return;
     }
 
+    if(from==to){
+      alert("Error: Cant create a road from a map to itself.");
+      return;
+    }
+
     var found = this.state.RoadList.find(e => (e["from"]==from && e["to"].to==to));    
     if(found){
       alert("Error: This road already exists.");
@@ -135,17 +140,22 @@ incrementToTime(increment){
   }  
 
   
-  export(){ 
-     
-
+  export(){     
     var firstparturl = window.location.href.split('&urlcode=')[0]; 
-
     var url = firstparturl + "&urlcode=" + JSON.stringify(this.state);
-navigator.clipboard.writeText(url).then(function() { 
-  alert("URL copiada al portapapeles (pasala por tinyurl para no spamear al pasarla...)")
-}, function(err) {
-  console.error('Async: Could not copy text: ', err);
-});
+
+    var tinyurllink = "https://tinyurl.com/api-create.php?url="+url;
+
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", tinyurllink, false ); // false for synchronous request
+    xmlHttp.send( null );
+    url =  xmlHttp.responseText;
+
+    navigator.clipboard.writeText(url).then(function() { 
+      alert("URL copiada al portapapeles")
+    }, function(err) {
+      console.error('Async: Could not copy text: ', err);
+    });
   }
 
   import(){
@@ -157,6 +167,8 @@ navigator.clipboard.writeText(url).then(function() {
               urlparam = this.replaceAll(urlparam,'%7D','}');
               urlparam = this.replaceAll(urlparam,'%22','"');
               urlparam = this.replaceAll(urlparam,'%20',' ');
+              urlparam = this.replaceAll(urlparam,'%5B','[');
+              urlparam = this.replaceAll(urlparam,'%5D',']');
             }
           }else{
             this.createNewNode(650,100,"Quiitun-Duosum",0);
