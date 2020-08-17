@@ -3,14 +3,20 @@ import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same ti
 import './node.css'
 import { Close, ArrowUpward } from '@material-ui/icons';
 
+
+
 export class Node extends React.Component {
     constructor(props) {
         super(props);   
         // Don't call this.setState() here!
         this.state = {           
             
-         };                    
+         };        
+         
+            
       }
+
+
       
       getRoadTypeAsColor(){
             if(this.props.maptype==0){ 

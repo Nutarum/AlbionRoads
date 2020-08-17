@@ -14,47 +14,35 @@ export class Road extends React.Component {
             posY: 0
          };             
       }      
-
-      
-      dateDiffToString(a, b){
-
-        // make checks to make sure a and b are not null
-        // and that they are date | integers types
-    
-        var diff = Math.abs(a - b);
-    
-        var ms = diff % 1000;
-        diff = (diff - ms) / 1000
-        var ss = diff % 60;
-        diff = (diff - ss) / 60
-        var mm = diff % 60;
-        diff = (diff - mm) / 60
-        var hh = diff % 24;
-    
-        return hh+":"+mm+":"+ss;
-    
-    }
+     
 
       showTime() { 
-        return new Date(this.props.time).toLocaleString();
+        var showDate = new Date(this.props.time).toLocaleString();
+        return showDate;
     } 
 
     showRemaining(){
-        return this.dateDiffToString(new Date(this.props.time), new Date());
+      var time = new Date(this.props.time);
+      var now =  new Date();
+
+      var diff = Math.abs(time - now);    
+      var ms = diff % 1000;
+      diff = (diff - ms) / 1000
+      var ss = diff % 60;
+      diff = (diff - ss) / 60
+      var mm = diff % 60;
+      diff = (diff - mm) / 60
+      var hh = diff;
+
+      if(isNaN(hh) || isNaN(mm) || isNaN(ss) || hh>99){
+        return "???"
+      }
+  
+      return ("00"+hh).slice(-2)+":"+("00"+mm).slice(-2)+":"+("00"+ss).slice(-2);       
     }
 
-      componentDidMount() {
-    
-        this.interval = setInterval(() => {
 
-          if(this.props.size>-1){ //si aun no lo hemos "borrado"
-          //miramos a ver si ya se ha cerrado
-              if(this.props.time<new Date()){
-                this.delete(false);
-            }
-          }
-
-
+    recolocarPosicion(){      
           //recolocamos automaticamente el camino
           var rect1 = (document.getElementsByClassName(this.props.from));
           var rect2 = (document.getElementsByClassName(this.props.to));
@@ -82,19 +70,21 @@ export class Road extends React.Component {
               //OJO CON ESAS 2 CONSTANTES, CUANDO SE CAMBIAN LOS INPUTS DE LA PARTE DE ARRIBA
               //LOS CAMINOS SE DESCOLOCAN PORQUE LA PANTALLA TOMA UNA REFERENCIA DEL 0 DISTINTA
               this.state.posX = (x1 + ((x2-x1) / 2))-50;
-              this.state.posY = (y1 + ((y2-y1) / 2))+20;
-            
+              this.state.posY = (y1 + ((y2-y1) / 2))+20;            
               this.forceUpdate();
           }
-         
+    }
 
-
-
-
-          //var rect = element;
-          //console.log(rect.top, rect.right, rect.bottom, rect.left);
-
-          
+      componentDidMount() {
+        this.recolocarPosicion();
+        this.interval = setInterval(() => {
+          if(this.props.size>-1){ //si aun no lo hemos "borrado"
+          //miramos a ver si ya se ha cerrado
+              if(this.props.time<new Date()){
+                this.delete(false);
+            }
+          }         
+          this.recolocarPosicion();          
           this.forceUpdate();
         
         }, 1000);

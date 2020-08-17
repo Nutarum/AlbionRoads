@@ -14,10 +14,7 @@ export class AlbionMap extends React.Component {
 
               RoadList: [             
             ]
-         };
-
-      
-          
+         };               
       }
 
       componentDidMount() {
@@ -204,7 +201,7 @@ incrementToTime(increment){
 
         return (            
             <div>
-              <span className="left">4</span>
+              <span className="left">5</span>
                 
                 <button onClick={()=>this.clickNewNode()}>Add map</button>
                 name:<input id="nameInput"></input>      
