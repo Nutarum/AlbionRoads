@@ -1,6 +1,7 @@
 import React from 'react';
 import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
 import './node.css'
+import { Close } from '@material-ui/icons';
 
 export class Node extends React.Component {
     constructor(props) {
@@ -113,7 +114,7 @@ export class Node extends React.Component {
 
 
                       <div >{this.props.name}</div>             </strong> 
-                      <button className="smallBtn" onClick={()=>this.delete()}> del </button>
+                      <button className="smallBtn" onClick={()=>this.delete()}> <Close className="iconDel" style={{ fontSize: 18 }}></Close> </button>
               </div>
             </Draggable>
                 </span>

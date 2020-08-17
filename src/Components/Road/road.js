@@ -3,6 +3,7 @@ import LineTo from 'react-lineto';
 import './road.css';
 import { thisExpression } from '@babel/types';
 import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
+import { Close,Refresh } from '@material-ui/icons';
 
 export class Road extends React.Component {
     constructor(props) {
@@ -190,13 +191,13 @@ export class Road extends React.Component {
                               <option value="2" >2</option> 
                               <option value="7" >7</option> 
                               <option value="20" >20</option>           
-                              </select>                                 
-                              <br/>  <span className="dateTime" >{this.showTime()} </span>
-                              
+                              </select>                                                 
+                              <br/>  <span className="dateTime" >{this.showTime()} </span>                              
                               <br/> {this.showRemaining()  } 
-                              <button className="smallBtn2" onClick={()=>this.recalc()}> recalc </button>
+                              <button className="smallBtn" onClick={()=>this.delete(true)}>  <Close className="iconDel" style={{ fontSize: 18 }}></Close>  </button>   
+                              <button className="smallBtn" onClick={()=>this.recalc()}> <Refresh className="iconDel" style={{ fontSize: 18 }}></Refresh> </button>
                               </div>  
-                                  <button className="smallBtn2" onClick={()=>this.delete(true)}> del </button>
+                                 
                         </div>
                     </Draggable>
                 </div>
