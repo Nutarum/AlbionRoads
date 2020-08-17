@@ -15,7 +15,6 @@ export class AlbionMap extends React.Component {
             ]
          };
 
-         //this.createNewNode(650,100,"Quiitun-Duosum",0);
         this.import(); //si hya parametro en la url, importara el mapa         
           
       }
@@ -25,31 +24,45 @@ export class AlbionMap extends React.Component {
       }
       
     NodeChangeHandler(nodeName,newX, newY,newmaptype) {
-        const found = this.state.NodeList.find(e => e["Node"].props.name==nodeName);     
+        const found = this.state.NodeList.find(e => e["name"]==nodeName);     
         found["posX"] = newX;
         found["posY"] = newY;
         found["maptype"] = newmaptype;
 
+        this.forceUpdate();
+    }
 
+    handleDeleteNode(nodeName){
+      const found = this.state.NodeList.find(e => e["name"]==nodeName);     
+      found["name"] = "";
+      this.forceUpdate();
+    }
+
+    handleDeleteRoad(fromName,toName){
+      var found = this.state.RoadList.find(e => (e["from"]==fromName) && (e["to"]==toName) );        
+      found["from"] = "";
+      this.forceUpdate();
     }
 
     RoadChangeHandler(fromName,toName,time,size,newX, newY) {
-        var found = this.state.RoadList.find(e => (e["Road"].props.from==fromName) && (e["Road"].props.to==toName) );        
+        var found = this.state.RoadList.find(e => (e["from"]==fromName) && (e["to"]==toName) );        
         found["posX"] = newX;
         found["posY"] = newY;
         found["time"] = time;
         found["size"] = size;
     }
 
-  
-
     clickNewNode(){
         this.createNewNode(0,0,document.getElementById('nameInput').value,document.getElementById('maptypeSelect').value);
     }
 
-  createNewNode(posX, posY , name, maptype){      
+  createNewNode(posX, posY , name, maptype){ 
+    
+    if(name==""){
+      return;
+    }
 
-    const found = this.state.NodeList.find(e => e["Node"].props.name==name);    
+    const found = this.state.NodeList.find(e => e["name"]==name);    
     if(found){
       alert("NODE NAME ALREADY EXISTS");
       return;
@@ -59,11 +72,10 @@ export class AlbionMap extends React.Component {
     newNode["posX"] = posX;
     newNode["posY"] = posY;
     newNode["maptype"] = maptype;
-    newNode["Node"] = <Node posX={posX} posY={posY} name={name} maptype={maptype} handleParentChange={this.NodeChangeHandler.bind(this)}></Node>;
+    newNode["name"] = name;
     this.state.NodeList.push(newNode);
     this.forceUpdate();
   }
-
 
   clickNewRoad(){
     this.createNewRoad(0,0,this.incrementToTime(document.getElementById('timeInput').value),document.getElementById('fromInput').value,document.getElementById('toInput').value,document.getElementById('sizeSelect').value);
@@ -77,6 +89,10 @@ incrementToTime(increment){
 }
 
   createNewRoad(posX, posY, time, from,to, size){
+
+    if(from=="" || to==""){
+      return;
+    }
 
     var found = this.state.RoadList.find(e => (e["Road"].props.from==from && e["Road"].props.to==to));    
     if(found){
@@ -93,9 +109,11 @@ incrementToTime(increment){
       newRoad["posX"] = posX;
       newRoad["posY"] = posY;     
       newRoad["size"] = size; 
+      newRoad["time"] = time.getTime();
 
-    newRoad["time"] = time.getTime();
-    newRoad["Road"] = <Road size={size} from={from} to={to} time={time.getTime()} posX={posX} posY={posY} handleParentChange={this.RoadChangeHandler.bind(this)} ></Road>
+      newRoad["from"] = from; 
+      newRoad["to"] = to; 
+
     this.state.RoadList.push(newRoad);
     this.forceUpdate();
   }
@@ -118,13 +136,9 @@ navigator.clipboard.writeText(url).then(function() {
 }, function(err) {
   console.error('Async: Could not copy text: ', err);
 });
-
-    //document.getElementById('importTxt').value = JSON.stringify(this.state);
   }
 
   import(){
-   
-      //var newState = JSON.parse(document.getElementById('importTxt').value);
 
       var urlparam = window.location.href.split('urlcode=')[1];
           if(urlparam){
@@ -135,32 +149,24 @@ navigator.clipboard.writeText(url).then(function() {
               urlparam = this.replaceAll(urlparam,'%20',' ');
             }
           }else{
+            this.createNewNode(650,100,"Quiitun-Duosum",0);
             return;
           }
           console.log(urlparam);
           var newState = JSON.parse(urlparam);
       
       newState["NodeList"].forEach(e => {
-               if(e["posX"]>-999){
-          this.createNewNode(e["posX"],e["posY"],e["Node"]["props"]["name"],e["maptype"]);
-        }
-        
+           if(e["name"]!=""){
+            this.createNewNode(e["posX"],e["posY"],e["name"],e["maptype"]);
+          }        
       } );
 
       
       newState["RoadList"].forEach(e => {
-
-        if(e["size"]>0){
-          this.createNewRoad(e["posX"],e["posY"],new Date(e["time"]),e["Road"]["props"]["from"],e["Road"]["props"]["to"],e["size"]);
-        }
-        
-     
-      } );
-      
-
-
-      //this.state.RoadList = newState["RoadList"];
-      //this.forceUpdate();
+        if(e["from"]!=""){
+          this.createNewRoad(e["posX"],e["posY"],new Date(e["time"]),e["from"],e["to"]);
+        }             
+      } );    
   }
 
 
@@ -200,8 +206,8 @@ navigator.clipboard.writeText(url).then(function() {
               <button onClick={()=>this.export()}>Export</button>
                
 
-                {this.state.NodeList.map(node => node["Node"])}    
-                {this.state.RoadList.map(road => road["Road"])}
+                {this.state.NodeList.map(node => <Node posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)}></Node> )}    
+                {this.state.RoadList.map(road => <Road size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} posX={road["posX"]} posY={road["posY"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
              
 
             </div>          

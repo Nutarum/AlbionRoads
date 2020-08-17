@@ -9,15 +9,8 @@ export class Road extends React.Component {
         super(props);   
         // Don't call this.setState() here!
         this.state = {
-            posX: 0,
-            posY: 0,
-            time: new Date().getSeconds(),
-            size:7
-         };       
-         this.state.size = this.props.size;        
-         this.state.time = this.props.time;       
-                 
-         
+            
+         };             
       }      
 
       
@@ -41,20 +34,20 @@ export class Road extends React.Component {
     }
 
       showTime() { 
-        return new Date(this.state.time).toLocaleString();
+        return new Date(this.props.time).toLocaleString();
     } 
 
     showRemaining(){
-        return this.dateDiffToString(new Date(this.state.time), new Date());
+        return this.dateDiffToString(new Date(this.props.time), new Date());
     }
 
       componentDidMount() {
     
         this.interval = setInterval(() => {
 
-          if(this.state.size>-1){ //si aun no lo hemos "borrado"
+          if(this.props.size>-1){ //si aun no lo hemos "borrado"
           //miramos a ver si ya se ha cerrado
-              if(this.state.time<new Date()){
+              if(this.props.time<new Date()){
                 this.delete();
             }
           }
@@ -68,26 +61,22 @@ export class Road extends React.Component {
       }
 
       delete(){
-
-     
-            this.state.size=-1;
-            this.props.handleParentChange(this.props.from, this.props.to,this.state.time, this.state.size,this.state.posX,this.state.posY);
+        
+            this.props.handleParentDelete(this.props.from, this.props.to);
         
         this.forceUpdate();
       }
 
-      handleStop(e,data){        
-        this.state.posX=data.x;
-        this.state.posY=data.y;
+      handleStop(e,data){      
      
-        this.props.handleParentChange(this.props.from, this.props.to,this.state.time, this.state.size,this.state.posX,this.state.posY);
+        this.props.handleParentChange(this.props.from, this.props.to,this.props.time, this.props.size,data.x,data.y);
   }
 
       
     render() {     
         
        
-        if(this.state.size<0){
+        if(this.props.from==""){
             return <span></span>;
                     }else{
             return (
@@ -104,7 +93,7 @@ export class Road extends React.Component {
                         onDrag={this.handleDrag}
                         onStop={this.handleStop.bind(this)}>
                         <div className={"box no-cursor posAbsolute"}>           
-                               <div className="cursor"> <strong> {this.state.size}</strong>  <br/>  <span class="dateTime" >{this.showTime()} </span><br/> {this.showRemaining()  }</div>      <button class="smallBtn2" onClick={()=>this.delete()}> del </button>
+                               <div className="cursor"> <strong> {this.props.size}</strong>  <br/>  <span class="dateTime" >{this.showTime()} </span><br/> {this.showRemaining()  }</div>      <button class="smallBtn2" onClick={()=>this.delete()}> del </button>
                         </div>
                     </Draggable>
                 </div>

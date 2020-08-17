@@ -6,30 +6,25 @@ export class Node extends React.Component {
     constructor(props) {
         super(props);   
         // Don't call this.setState() here!
-        this.state = {
-            posX:0,
-            posY:0,
-            maptype:0
-         };   
-
-         this.state.maptype = this.props.maptype;
-                 
+        this.state = {           
+            
+         };                    
       }
       
       getRoadTypeAsColor(){
-            if(this.state.maptype==0){ 
+            if(this.props.maptype==0){ 
                 return 'teal';//home
-            }else if(this.state.maptype==1){
+            }else if(this.props.maptype==1){
                 return 'pink';//road
-            }else if(this.state.maptype==2){
+            }else if(this.props.maptype==2){
                 return 'purple';//road with hideouts
-            }else if(this.state.maptype==3){
+            }else if(this.props.maptype==3){
                 return 'blue';//blue
-            }else if(this.state.maptype==4){
+            }else if(this.props.maptype==4){
                 return 'Yellow';//yelow
-            }else if(this.state.maptype==5){
+            }else if(this.props.maptype==5){
                 return 'red';//red
-            }else if(this.state.maptype==6){
+            }else if(this.props.maptype==6){
                 return 'grey';//black
             }else {
                 return 'white';
@@ -53,30 +48,24 @@ export class Node extends React.Component {
 
 
       onChange(e){
-        this.state.maptype= e.target.value;
-        this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY,this.state.maptype);
+        this.props.handleParentChange(this.props.name,this.props.posX,this.props.posY,e.target.value);
         this.forceUpdate();
       }
 
       handleStop(e,data){        
-          this.state.posX=data.x;
-          this.state.posY=data.y;
-
-          this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY,this.state.maptype);
+          this.props.handleParentChange(this.props.name,data.x,data.y,this.props.maptype);
     }
 
       delete(){
-
-            this.state.posX=-1000;
-            this.props.handleParentChange(this.props.name,this.state.posX,this.state.posY,this.state.maptype);
-
-        this.forceUpdate();
+            this.props.handleDeleteNode(this.props.name);
       }
 
     render() {        
 
-        if(this.state.posX<-999){
-return <span></span>;
+        console.log(this.props.posX);
+
+        if(this.props.name==""){
+            return <span></span>;
         }else{
 
             var styleSelectmaptypeNode = {
@@ -106,7 +95,7 @@ return <span></span>;
                           
                           <div>
 
-                        <select defaultValue={this.state.maptype} style = {styleSelectmaptypeNode} onChange = {this.onChange.bind(this)} name="select">
+                        <select defaultValue={this.props.maptype} style = {styleSelectmaptypeNode} onChange = {this.onChange.bind(this)} name="select">
                         <option value="0" >Home</option> 
                         <option value="1" >Road</option> 
                         <option value="2" >Road (HOs)</option>
