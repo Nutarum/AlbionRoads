@@ -3,7 +3,7 @@ import LineTo from 'react-lineto';
 import './road.css';
 import { thisExpression } from '@babel/types';
 import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
-import { Close,Refresh } from '@material-ui/icons';
+import { Close, Sync } from '@material-ui/icons';
 
 export class Road extends React.Component {
     constructor(props) {
@@ -79,8 +79,10 @@ export class Road extends React.Component {
                 y1=y2;
                 y2=tmp;
               }
+              //OJO CON ESAS 2 CONSTANTES, CUANDO SE CAMBIAN LOS INPUTS DE LA PARTE DE ARRIBA
+              //LOS CAMINOS SE DESCOLOCAN PORQUE LA PANTALLA TOMA UNA REFERENCIA DEL 0 DISTINTA
               this.state.posX = (x1 + ((x2-x1) / 2))-50;
-              this.state.posY = (y1 + ((y2-y1) / 2))-30;
+              this.state.posY = (y1 + ((y2-y1) / 2))+20;
             
               this.forceUpdate();
           }
@@ -195,7 +197,7 @@ export class Road extends React.Component {
                               <br/>  <span className="dateTime" >{this.showTime()} </span>                              
                               <br/> {this.showRemaining()  } 
                               <button className="smallBtn" onClick={()=>this.delete(true)}>  <Close className="iconDel" style={{ fontSize: 18 }}></Close>  </button>   
-                              <button className="smallBtn" onClick={()=>this.recalc()}> <Refresh className="iconDel" style={{ fontSize: 18 }}></Refresh> </button>
+                              <button className="smallBtn" onClick={()=>this.recalc()}> <Sync className="iconDel" style={{ fontSize: 18 }}></Sync> </button>
                               </div>  
                                  
                         </div>

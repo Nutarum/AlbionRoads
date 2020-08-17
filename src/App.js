@@ -13,7 +13,3 @@ function App() {
 }
 
 export default App;
-
-//TODO:
-
-//creación de caminos interactiva (o al menos algo mas intuitivo)

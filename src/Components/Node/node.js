@@ -1,7 +1,7 @@
 import React from 'react';
 import Draggable, {DraggableCore} from 'react-draggable'; // Both at the same time
 import './node.css'
-import { Close } from '@material-ui/icons';
+import { Close, ArrowUpward } from '@material-ui/icons';
 
 export class Node extends React.Component {
     constructor(props) {
@@ -33,17 +33,7 @@ export class Node extends React.Component {
       }
 
       onClick(){
-        var t1 = document.getElementById('fromInput').value;
-        var t2 = document.getElementById('toInput').value;
-
-        if(t1==""){
-            document.getElementById('fromInput').value=this.props.name;
-        }else if(t1!="" && t2 != ""){
-            document.getElementById('fromInput').value="";
-            document.getElementById('toInput').value="";
-        }else{
-            document.getElementById('toInput').value=this.props.name;
-        }
+       
 
       }
 
@@ -115,6 +105,8 @@ export class Node extends React.Component {
 
                       <div >{this.props.name}</div>             </strong> 
                       <button className="smallBtn" onClick={()=>this.delete()}> <Close className="iconDel" style={{ fontSize: 18 }}></Close> </button>
+
+                      <button className="smallBtn3" onClick={()=>this.props.handleClickNewRoad(this.props.name)}> <ArrowUpward className="iconDel" style={{ fontSize: 18 }}></ArrowUpward> </button>
               </div>
             </Draggable>
                 </span>
