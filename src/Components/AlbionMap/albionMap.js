@@ -55,7 +55,7 @@ export class AlbionMap extends React.Component {
     }
 
     clickNewNode(){
-        this.createNewNode(0,0,document.getElementById('nameInput').value,document.getElementById('maptypeSelect').value);
+        this.createNewNode(0,0,document.getElementById('nameInput').value,1);
         document.getElementById('nameInput').value = "";
     }
 
@@ -203,29 +203,14 @@ incrementToTime(increment){
         return (            
             <div>
               <span className="left">5</span>
-                
-                <button onClick={()=>this.clickNewNode()}>Add map</button>
-                name:<input id="nameInput"></input>      
+              <input id="nameInput" placeholder="map name"></input>  &nbsp;  
+              <button onClick={()=>this.clickNewNode()}>Add map</button>                 
+              <br/>
+              <button onClick={()=>this.export()}>Export as URL</button>             
 
-                type:<select id="maptypeSelect" name="select" defaultValue={1}>
-                <option value="0" >Home</option> 
-                <option value="1" >Road</option> 
-                <option value="2">Road (with hideouts)</option>
-                <option value="3">Blue</option>
-                <option value="4">Yellow</option>
-                <option value="5">Red</option>
-                <option value="6">Black</option>
-                <option value="7">Undefined</option>                
-                </select>
-               
-              <p></p>
-              <button onClick={()=>this.export()}>Export</button>
-               
-
-                {this.state.NodeList.map((node,i) => <Node key={i} selectedNode={this.state.newRoad} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node> )}    
-                {this.state.RoadList.map((road,i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
+              {this.state.NodeList.map((node,i) => <Node key={i} selectedNode={this.state.newRoad} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node> )}    
+              {this.state.RoadList.map((road,i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
              
-
             </div>          
         );
     }

@@ -67,10 +67,20 @@ export class Road extends React.Component {
                 y1=y2;
                 y2=tmp;
               }
-              //OJO CON ESAS 2 CONSTANTES, CUANDO SE CAMBIAN LOS INPUTS DE LA PARTE DE ARRIBA
+
+              var myW = 0;
+              //var myH = 0;
+              var rect3 = (document.getElementsByClassName("road"+this.props.from+this.props.to));
+              if(rect3.length>0){
+                rect3 = rect3[0].getBoundingClientRect();
+                myW = rect3["width"];
+                //myH = rect3["height"];
+              }
+
+              //OJO CON ESA CONSTANTE EN POSY, CUANDO SE CAMBIAN LOS INPUTS DE LA PARTE DE ARRIBA
               //LOS CAMINOS SE DESCOLOCAN PORQUE LA PANTALLA TOMA UNA REFERENCIA DEL 0 DISTINTA
-              this.state.posX = (x1 + ((x2-x1) / 2))-50 + window.scrollX;
-              this.state.posY = (y1 + ((y2-y1) / 2))+20 + window.scrollY;            
+              this.state.posX = (x1 + ((x2-x1) / 2)) + window.scrollX - (myW/2);
+              this.state.posY = (y1 + ((y2-y1) / 2)) + window.scrollY + 30; //(myH/2);            
               this.forceUpdate();
           }
     }
@@ -163,7 +173,7 @@ export class Road extends React.Component {
             return (
                 <div>
                     <LineTo from={this.props.from} to={this.props.to} borderColor={lineColor} borderStyle={lineStyle}></LineTo>
-                    <Draggable                  
+                    <Draggable              
                         //handle="div"
 
                         // vamos a hacer una tonteria, lo dejo como dragable pero le quito la opcion de desplazarse
@@ -177,7 +187,7 @@ export class Road extends React.Component {
                         onStart={this.handleStart}
                         onDrag={this.handleDrag}
                         onStop={this.handleStop.bind(this)}>
-                        <div style={typeUnselect}  className={"box no-cursor posAbsolute"}>           
+                        <div style={typeUnselect}  className={"box no-cursor posAbsolute" + " road" + this.props.from + this.props.to}>           
                                <div className="cursor">                                  
                                <select defaultValue={this.props.size} onChange = {this.onChange.bind(this)} name="select">
                               <option value="2" >2</option> 
