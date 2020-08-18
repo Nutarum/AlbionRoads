@@ -8,6 +8,7 @@ export class AlbionMap extends React.Component {
         super(props);   
         // Don't call this.setState() here!
         this.state = {       
+            imported:false,
             newRoad: "",    
             NodeList: [               
               ],
@@ -18,7 +19,11 @@ export class AlbionMap extends React.Component {
       }
 
       componentDidMount() {
-        this.import(); //si hya parametro en la url, importara el mapa         
+        if(!this.state.imported){
+          this.import(); //si hya parametro en la url, importara el mapa         
+          this.state.imported=true;
+          this.forceUpdate();
+        }       
       }
 
       replaceAll(string, search, replace) {

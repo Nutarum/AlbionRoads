@@ -1,6 +1,12 @@
 .textBlock{
+    margin-top:30px;
+    position: relative;
     display:inline-block;
     text-align:left;
+    background-color: #a0d2eb;
+    border: 1px solid #50829b;
+    padding:30px;
+    z-index: 30;
 }
 
 .centerText{

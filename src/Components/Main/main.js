@@ -22,17 +22,16 @@ export class Main extends React.Component {
 
     render() {     
 
-        var mainContent;
+        var infoScreen = "";
         if(this.state.showingInfo){
-          mainContent=<InfoScreen handleInfoClick={this.handleInfoClick.bind(this)}></InfoScreen>
-        }else{
-          mainContent = <AlbionMap></AlbionMap>;
+            infoScreen=<InfoScreen handleInfoClick={this.handleInfoClick.bind(this)}></InfoScreen>
         }
 
         return (   
             <span>        
                 <WebHeader showingInfo={this.state.showingInfo} handleInfoClick={this.handleInfoClick.bind(this)}></WebHeader>
-                {mainContent}
+                <AlbionMap></AlbionMap>
+                {infoScreen}
             </span> 
         );
     }

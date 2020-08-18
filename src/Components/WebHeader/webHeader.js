@@ -10,11 +10,6 @@ export class WebHeader extends React.Component {
             
          };               
       }
-
-      btnInfoClick(){       
-        this.props.handleInfoClick();        
-      }
-
     render() {     
 
       var icon = <Info className="iconInfo" style={{ fontSize: 22 }}></Info>;
@@ -25,7 +20,7 @@ export class WebHeader extends React.Component {
             <div className="header">
                <span><b>Albion road map</b></span>    
                <span className="right">v5</span>   
-               <button className="btnInfo" onClick={()=>this.btnInfoClick()}> {icon} </button>                 
+               <button className="btnInfo" onClick={()=>this.props.handleInfoClick()}> {icon} </button>                 
             </div>          
         );
     }

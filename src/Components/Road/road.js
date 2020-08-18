@@ -164,7 +164,7 @@ export class Road extends React.Component {
 
       var typeUnselect={       
         userSelect:'none',
-        zIndex: 99
+        zIndex: 10
       }
        
         if(this.props.from==""){

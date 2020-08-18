@@ -1,6 +1,6 @@
 import React from 'react';
 import './infoScreen.css';
-import { ArrowUpward,Sync } from '@material-ui/icons';
+import { ArrowUpward,Sync,Close } from '@material-ui/icons';
 
 export class InfoScreen extends React.Component {
     constructor(props) {
@@ -19,6 +19,7 @@ export class InfoScreen extends React.Component {
 
         return (            
             <div  className="textBlock">
+                <button className="smallBtn" onClick={()=>this.props.handleInfoClick()}> <Close className="iconDel" style={{ fontSize: 18 }}></Close> </button>
                 <br/>
                <p className="centerText"><b >Albion road mapper, made by Nutarum.</b>    </p>
                <br/>
@@ -44,7 +45,7 @@ export class InfoScreen extends React.Component {
                <br/>
                3) Mode the map around
                <br/>
-               3) Change its type if needed using a control like this one ->   &nbsp;  
+               3) Change its type if needed using a control like this one  {"->"}   &nbsp;  
                 <select defaultValue={1} style={styleSelectmaptypeNode} name="select">
                         <option value="0" >Home</option> 
                         <option value="1" >Road</option> 
@@ -69,7 +70,7 @@ export class InfoScreen extends React.Component {
                <button className="smallBtnInfo2"> <ArrowUpward className="iconDel" style={{ fontSize: 18 }}></ArrowUpward> </button>
                &nbsp;   on the other zone connected   
                <br/>
-               3) Change the portal size using a control like this one -> &nbsp;     
+               3) Change the portal size using a control like this one  {"->"} &nbsp;     
                <select defaultValue={7} name="select">
                     <option value="2" >2</option> 
                     <option value="7" >7</option> 
