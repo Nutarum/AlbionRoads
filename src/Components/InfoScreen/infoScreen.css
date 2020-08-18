@@ -1,0 +1,14 @@
+.textBlock{
+    display:inline-block;
+    text-align:left;
+}
+
+.centerText{
+    float: none;
+    text-align:center;
+}
+
+.smallBtnInfo2{
+    height: 18px;
+    width: 19px;
+}

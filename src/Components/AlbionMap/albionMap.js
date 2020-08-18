@@ -202,10 +202,9 @@ incrementToTime(increment){
 
         return (            
             <div>
-              <span className="left">5</span>
               <input id="nameInput" placeholder="map name"></input>  &nbsp;  
               <button onClick={()=>this.clickNewNode()}>Add map</button>                 
-              <br/>
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
               <button onClick={()=>this.export()}>Export as URL</button>             
 
               {this.state.NodeList.map((node,i) => <Node key={i} selectedNode={this.state.newRoad} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node> )}    

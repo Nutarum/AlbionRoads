@@ -1,13 +1,13 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { AlbionMap } from "./Components/AlbionMap/albionMap.js"
+
+import { Main } from "./Components/Main/main.js"
 
 function App() {
   return (
     <div className="App">
-
-      <AlbionMap></AlbionMap>      
+      <Main></Main>   
     </div>
   );
 }
