@@ -80,7 +80,7 @@ export class Road extends React.Component {
               //OJO CON ESA CONSTANTE EN POSY, CUANDO SE CAMBIAN LOS INPUTS DE LA PARTE DE ARRIBA
               //LOS CAMINOS SE DESCOLOCAN PORQUE LA PANTALLA TOMA UNA REFERENCIA DEL 0 DISTINTA
               this.state.posX = (x1 + ((x2-x1) / 2)) + window.scrollX - (myW/2);
-              this.state.posY = (y1 + ((y2-y1) / 2)) + window.scrollY + 30; //(myH/2);            
+              this.state.posY = (y1 + ((y2-y1) / 2)) + window.scrollY + 40; //(myH/2);            
               this.forceUpdate();
           }
     }

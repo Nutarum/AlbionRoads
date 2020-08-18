@@ -177,7 +177,7 @@ incrementToTime(increment){
               urlparam = this.replaceAll(urlparam,'%5D',']');
             }
           }else{
-            this.createNewNode(650,100,"Quiitun-Duosum",0);
+            this.createNewNode(650,100,"Qiitun-Duosum",0);
             return;
           }
           console.log(urlparam);
