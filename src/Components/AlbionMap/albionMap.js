@@ -23,6 +23,13 @@ export class AlbionMap extends React.Component {
             this.import(); //si hya parametro en la url, importara el mapa     
             this.setState({ imported: true });
         }
+
+        document.getElementById("nameInput").addEventListener("keyup", function (event) {
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                document.getElementById("addMapBtn").click();
+            }
+        });
     }
 
     replaceAll(string, search, replace) {
@@ -204,7 +211,7 @@ export class AlbionMap extends React.Component {
         return (
             <div>
                 <input id="nameInput" placeholder="map name"></input>  &nbsp;
-                <button onClick={() => this.clickNewNode()}>Add map</button>
+                <button id="addMapBtn" onClick={() => this.clickNewNode()}>Add map</button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onClick={() => this.export()}>Export as URL</button>
 
