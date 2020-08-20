@@ -25,7 +25,12 @@ export class Road extends React.Component {
         var time = new Date(this.props.time);
         var now = new Date();
 
-        var diff = Math.abs(time - now);
+        if(time<now){
+            return ""; //el camino ya está cerrado
+        }
+
+        var diff = Math.abs(time - now);       
+
         var ms = diff % 1000;
         diff = (diff - ms) / 1000
         var ss = diff % 60;
@@ -93,12 +98,7 @@ export class Road extends React.Component {
         Modal.setAppElement('body');
         this.recolocarPosicion();
         this.interval = setInterval(() => {
-            if (this.props.size > -1) { //si aun no lo hemos "borrado"
-                //miramos a ver si ya se ha cerrado
-                if (this.props.time < new Date()) {
-                    this.delete(false);
-                }
-            }
+            
             this.recolocarPosicion();
             this.forceUpdate();
 
@@ -113,11 +113,9 @@ export class Road extends React.Component {
         this.forceUpdate();
     }
 
-    delete(withConfirm) {
-        if (withConfirm) {
-            if (!window.confirm("Confirm delete")) {
-                return;
-            }
+    delete() {
+        if (!window.confirm("Confirm delete")) {
+            return;            
         }
         this.props.handleDeleteRoad(this.props.from, this.props.to);
     }
@@ -200,8 +198,20 @@ export class Road extends React.Component {
 
         var lineStyle = "solid";
         if (tRestante < 1800) {
+           // lineStyle = "dashed";
+        }        
+        
+        var selectSize = <select defaultValue={this.props.size} onChange={this.onChange.bind(this)} name='select'>
+            <option value='2' >2</option>
+            <option value='7' >7</option>
+            <option value='20' >20</option>
+            </select>;
+   
+        if(tRestante<0){           
+            selectSize="";
             lineStyle = "dashed";
         }
+
         var typeUnselect = {
             userSelect: 'none',
             zIndex: 10
@@ -231,14 +241,10 @@ export class Road extends React.Component {
                         onStop={this.handleStop.bind(this)}>
                         <div style={typeUnselect} className={"box no-cursor posAbsolute" + thisRoadClassName}>
                             <div className="cursor">
-                                <select defaultValue={this.props.size} onChange={this.onChange.bind(this)} name="select">
-                                    <option value="2" >2</option>
-                                    <option value="7" >7</option>
-                                    <option value="20" >20</option>
-                                </select>
+                                {selectSize}                               
                                 <br />    <span className="dateTime" >{this.showTime()} </span>
                                 <br /> {this.showRemaining()}
-                                <button className="smallBtn" onClick={() => this.delete(true)}>    <Close className="iconDel" style={{ fontSize: 18 }}></Close>    </button>
+                                <button className="smallBtn" onClick={() => this.delete()}>    <Close className="iconDel" style={{ fontSize: 18 }}></Close>    </button>
                                 <button className="smallBtn" onClick={() => this.handleOpenModalSetTime()}> <Sync className="iconDel" style={{ fontSize: 18 }}></Sync> </button>
                             </div>
 
