@@ -205,15 +205,74 @@ export class AlbionMap extends React.Component {
         });
     }
 
+    stringTypeToIntType(t){        
+        if(t==="TUNNEL_LOW"){
+            return 1;
+        }else if(t==="TUNNEL_HIDEOUT_DEEP" || t==="TUNNEL_HIDEOUT"){
+            return 2;
+        }else if(t==="SAFEAREA"){
+            return 3;
+        }else if(t==="OPENPVP_YELLOW"){
+            return 4;
+        }else if(t==="OPENPVP_RED"){
+            return 5;
+        }else if(t==="OPENPVP_BLACK_1" || t==="OPENPVP_BLACK_2" || t==="OPENPVP_BLACK_3" || t==="OPENPVP_BLACK_4" || t==="OPENPVP_BLACK_5"|| t==="OPENPVP_BLACK_6"){
+            return 6;
+        }else{
+            return 7;
+        }
+    }
+
+    //importa un codigo en formato
+    // from/to/size/time#from/to/size/time#from/to/size/time#from/to/size/time
+    importCode(){
+        var code = document.getElementById('autoImport').value;
+        document.getElementById('autoImport').value="";
+        console.log(code);
+        code = code.split("#");
+        code.forEach(e => {
+            var arr = e.split("/");
+            if(arr.length===7){ //es 1 mas porque empezamos con un '/' para evitar lios con el \n
+                var from = arr[1];
+                var typeFrom = arr[2];
+                var to = arr[3];
+                var typeTo = arr[4];
+                var size = arr[5];
+                var time = arr[6];
+                
+                if(from && to && size && time && from!=="" && to !== "" && size !== "" && time !== ""){
+                    var found1 = this.state.NodeList.find(e => e["name"] === from);
+                    if(!found1){
+
+                        this.createNewNode(0, 0, from, this.stringTypeToIntType(typeFrom));
+                    }
+                    var found2 = this.state.NodeList.find(e => e["name"] === to);   
+                    if(!found2){                    
+                        this.createNewNode(0, 0, to, this.stringTypeToIntType(typeTo));
+                    }                
+                    var d = new Date(0); // The 0 there is the key, which sets the date to the epoch
+                    d.setUTCSeconds(time);
+
+                    //si el camino no existia ya, lo creamos
+                    if (!this.state.RoadList.find(e => (e["from"] === from && e["to"] === to)) && !this.state.RoadList.find(e => (e["from"] === to && e["to"] === from)))  {
+                        this.createNewRoad(d, from, to, size);
+                    }                   
+                }
+            }            
+        });
+    }
 
     render() {
-
         return (
             <div>
                 <input id="nameInput" placeholder="map name"></input>  &nbsp;
                 <button id="addMapBtn" onClick={() => this.clickNewNode()}>Add map</button>
               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onClick={() => this.export()}>Export as URL</button>
+
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                <input id="autoImport" placeholder="autoimport code"></input>  &nbsp;
+                <button onClick={() => this.importCode()}>import code</button>
 
                 {this.state.NodeList.map((node, i) => <Node key={i} selectedNode={this.state.newRoad} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node>)}
                 {this.state.RoadList.map((road, i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
