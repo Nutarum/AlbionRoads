@@ -206,7 +206,7 @@ export class AlbionMap extends React.Component {
     }
 
     stringTypeToIntType(t){        
-        if(t==="TUNNEL_LOW"){
+        if(t==="TUNNEL_LOW" || t==="TUNNEL_ROYAL"){
             return 1;
         }else if(t==="TUNNEL_HIDEOUT_DEEP" || t==="TUNNEL_HIDEOUT"){
             return 2;
