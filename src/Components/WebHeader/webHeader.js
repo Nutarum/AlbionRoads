@@ -10,8 +10,7 @@ export class WebHeader extends React.Component {
             
          };               
       }
-    render() {     
-
+    render() {    
       var icon = <Info className="iconInfo" style={{ fontSize: 22 }}></Info>;
       if(this.props.showingInfo){
         icon = <Replay className="iconInfo" style={{ fontSize: 22 }}></Replay>;
@@ -19,7 +18,7 @@ export class WebHeader extends React.Component {
         return (            
             <div className="header">
                <span><b>Albion road map</b></span>    
-               <span className="right">v5</span>   
+               <span className="right">&nbsp;&nbsp;</span>   
                <button className="btnInfo" onClick={()=>this.props.handleInfoClick()}> {icon} </button>                 
             </div>          
         );
