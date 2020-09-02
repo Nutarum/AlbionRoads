@@ -1,14 +1,17 @@
 import React from 'react';
 import Draggable from 'react-draggable'; // Both at the same time
 import './node.css'
-import { Close, ArrowUpward } from '@material-ui/icons';
+import {Info, Close, ArrowUpward } from '@material-ui/icons';
+import jsonInfo from './mapInfo.js'
+import Modal from 'react-modal';
 
 export class Node extends React.Component {
     constructor(props) {
         super(props);
         // Don't call this.setState() here!
         this.state = {
-
+            showModalInfo: false,
+            nodeInfo: null
         };
     }
 
@@ -41,6 +44,37 @@ export class Node extends React.Component {
         this.props.handleParentChange(this.props.name, data.x, data.y, this.props.maptype);
     }
 
+    showInfo(){
+        if(this.state.nodeInfo===null){
+            var found = jsonInfo['world']['clusters']['cluster'].find(e=> e.displayname===this.props.name);
+            if(!found){
+                this.setState({nodeInfo: -1});  
+                return;
+            }
+            this.setState({nodeInfo: found});           
+        }else if(this.state.nodeInfo===-1){
+            return;
+        }
+        this.setState({showModalInfo: true});
+    }
+
+    showNodeInfo(){    
+        if(!this.state.showModalInfo){
+            return "";
+        }
+        try{
+            var returnInfo = this.state.nodeInfo['timeregion'] + "\n" +  this.state.nodeInfo['type'] + "\n";
+            this.state.nodeInfo['minimapmarkers']['marker'].forEach(e=>{returnInfo+= "\n" + e['type']});
+            return returnInfo;
+        }   catch(e){
+            return "";
+        }      
+    }
+
+    handleCloseModal(){
+        this.setState({showModalInfo: false});
+    }
+
     delete() {
         if (!window.confirm("Confirm delete")) {
             return;
@@ -69,6 +103,8 @@ export class Node extends React.Component {
             }
 
             return (
+
+                <div>
                 <Draggable
                     //axis="y" (si no ponemos esto, el movimiento es libre)
                     handle="div"
@@ -92,15 +128,48 @@ export class Node extends React.Component {
                                     <option value="6" >Black</option>
                                     <option value="7" >Undefined</option>
                                 </select>
+                          
+
                             </div>
                             <div >{this.props.name}</div>             </strong>
-                        <button className="smallBtn" onClick={() => this.delete()}> <Close className="iconDel" style={{ fontSize: 18 }}></Close> </button>
 
+                            <button className="smallBtn2" onClick={() => this.showInfo()}> <Info className="iconDel" style={{ fontSize: 18 }}></Info> </button>
+
+                        <button className="smallBtn" onClick={() => this.delete()}> <Close className="iconDel" style={{ fontSize: 18 }}></Close> </button>
+                       
                         <button className="smallBtn3" onClick={() => this.props.handleClickNewRoad(this.props.name)}> <ArrowUpward className="iconDel" style={{ fontSize: 18 }}></ArrowUpward> </button>
                     </div>
                 </Draggable>
+
+                <Modal
+                        isOpen={this.state.showModalInfo}
+                        onRequestClose={() => this.handleCloseModal()}
+                        contentLabel="Road info modal"
+                        style={{
+                            overlay: {
+                                backgroundColor: '#A9A9A999',
+                                zIndex: 99
+                            },
+                            content: {
+                                backgroundColor: '#a0d2eb',
+                                position: 'absolute',
+                                left: this.props.posX,
+                                top: this.props.posY,
+                                width: 200,
+                                height: 300,
+                                padding: 20,
+                                border: "solid"
+                            }
+                        }}
+                    >
+                        <div className="modalDiv">
+                            <div><b>{this.props.name}</b></div>
+                            {this.showNodeInfo()}
+                        </div>
+                    </Modal>
+
+                </div>
             );
         }
     }
 }
-

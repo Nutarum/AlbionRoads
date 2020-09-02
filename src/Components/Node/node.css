@@ -15,6 +15,14 @@
     float: right;   
 }
 
+.smallBtn2 {
+    height: 18px;
+    width: 19px;
+    position: absolute;
+    left:42%;
+}
+
+
 .smallBtn3 {
     height: 18px;
     width: 19px;
@@ -28,4 +36,9 @@
 
 .typeSelectNode{
     width: 100px;
+}
+
+.modalDiv {
+    white-space: pre;
+    text-align:center;
 }

@@ -121,9 +121,7 @@ export class Road extends React.Component {
     }
 
     handleOpenModalSetTime() {
-        this.setState({
-            showModalTime: true
-        });
+        this.setState({showModalTime: true});
     }
 
     setInputFocus() {
@@ -256,7 +254,7 @@ export class Road extends React.Component {
                         onAfterOpen={() => this.setInputFocus()}
                         onRequestClose={() => this.handleCloseModal(false)}
 
-                        contentLabel="Example Modal"
+                        contentLabel="Set time modal"
                         style={{
                             overlay: {
                                 backgroundColor: '#A9A9A999',
