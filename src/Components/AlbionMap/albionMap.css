@@ -2,3 +2,10 @@
     float: left;
     text-align:left;
 }
+.MuiAutocomplete-root{
+    margin-top:5px;
+}
+
+.margin{
+    margin: 7px
+}

@@ -2,6 +2,9 @@ import React from 'react';
 import { Node } from "../Node/node.js"
 import { Road } from "../Road/road.js"
 import './albionMap.css'
+import mapsAndtypes from './mapsAndTypes.js'
+import { Autocomplete } from '@material-ui/lab';
+import { TextField,Grid } from '@material-ui/core';
 
 export class AlbionMap extends React.Component {
     constructor(props) {
@@ -24,6 +27,7 @@ export class AlbionMap extends React.Component {
             this.setState({ imported: true });
         }
 
+        
         document.getElementById("nameInput").addEventListener("keyup", function (event) {
             event.preventDefault();
             if (event.keyCode === 13) {
@@ -66,8 +70,18 @@ export class AlbionMap extends React.Component {
     }
 
     clickNewNode() {
-        this.createNewNode(0, 0, document.getElementById('nameInput').value, 1);
-        document.getElementById('nameInput').value = "";
+        var name =  document.getElementById('nameInput').value;
+        //si el mapa existe en el json de mapas y tipos, cargamos el tipo automaticamente
+        var found = mapsAndtypes['maps'].find(e=> e.displayname===name);
+       
+        var type = 7;
+        if(found){
+            type = this.stringTypeToIntType(found['type']);
+        }
+        this.createNewNode(0, 0, name, type);
+        //simula un click en la x que elimina el valor del input
+        this.refs['autocomplete'].getElementsByClassName('MuiAutocomplete-clearIndicator')[0].click();
+        //document.getElementById('nameInput').value = "";
     }
 
     createNewNode(posX, posY, name, maptype) {
@@ -185,7 +199,7 @@ export class AlbionMap extends React.Component {
                 urlparam = this.replaceAll(urlparam, '%5D', ']');
             }
         } else {
-            this.createNewNode(650, 100, "Qiitun-Duosum", 0);
+            this.createNewNode(600, 75, "Qiitun-Duosum", 0);
             return;
         }
         console.log(urlparam);
@@ -265,14 +279,27 @@ export class AlbionMap extends React.Component {
     render() {
         return (
             <div>
-                <input id="nameInput" placeholder="map name"></input>  &nbsp;
-                <button id="addMapBtn" onClick={() => this.clickNewNode()}>Add map</button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button onClick={() => this.export()}>Export as URL</button>
+                <Grid container spacing={24}>
+                    
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                <Autocomplete
+                id="nameInput"
+                ref={'autocomplete'}
+                options={mapsAndtypes['maps']}                
+                getOptionLabel={(option) => option.displayname}
+                style={{ width: 200 }}
+                renderInput={(params) => <TextField {...params} label="Map name" variant="outlined" size="small"/>}
+                />
+                 &nbsp;
+                <button className="margin" id="addMapBtn" onClick={() => this.clickNewNode()}>Add map</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+                <button className="margin" onClick={() => this.export()}>Export as URL</button>
 
-                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-                <input id="autoImport" placeholder="autoimport code"></input>  &nbsp;
-                <button onClick={() => this.importCode()}>import code</button>
+                &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                <input className="margin" id="autoImport" placeholder="autoimport code"></input>  
+                <button className="margin" onClick={() => this.importCode()}>import code</button>
+
+                </Grid>
 
                 {this.state.NodeList.map((node, i) => <Node key={i} selectedNode={this.state.newRoad} posX={node["posX"]} posY={node["posY"]} name={node["name"]} maptype={node["maptype"]} handleParentChange={this.NodeChangeHandler.bind(this)} handleDeleteNode={this.handleDeleteNode.bind(this)} handleClickNewRoad={this.handleClickNewRoad.bind(this)}></Node>)}
                 {this.state.RoadList.map((road, i) => <Road key={i} size={road["size"]} from={road["from"]} to={road["to"]} time={road["time"]} handleParentChange={this.RoadChangeHandler.bind(this)} handleDeleteRoad={this.handleDeleteRoad.bind(this)} ></Road>)}
