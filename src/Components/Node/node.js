@@ -44,6 +44,16 @@ export class Node extends React.Component {
         this.props.handleParentChange(this.props.name, data.x, data.y, this.props.maptype);
     }
 
+     compare( a, b ) {
+        if ( a.type < b.type ){
+          return -1;
+        }
+        if ( a.type > b.type ){
+          return 1;
+        }
+        return 0;
+      }
+
     showInfo(){
         if(this.state.nodeInfo===null){
             var found = jsonInfo['world']['clusters']['cluster'].find(e=> e.displayname===this.props.name);
@@ -51,6 +61,9 @@ export class Node extends React.Component {
                 this.setState({nodeInfo: -1});  
                 return;
             }
+            //ordenamos los nodos del mapa en orden alfabetico
+            found['minimapmarkers']['marker'].sort(this.compare);
+
             this.setState({nodeInfo: found});           
         }else if(this.state.nodeInfo===-1){
             return;
